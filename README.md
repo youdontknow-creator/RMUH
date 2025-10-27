@@ -10,3 +10,6 @@ By you don't need know
    that's a cool question but i think i can't
 5. why did you make this questions
    because is just for you guys know about the script and other things
+
+and after all here is the loadstring
+loadstring(game:HttpGet("https://raw.githubusercontent.com/youdontknow-creator/RMUH/refs/heads/main/main.lua",true))()
