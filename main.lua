@@ -11,7 +11,7 @@ local Window = Rayfield:CreateWindow({
  local PlayerTab = Window:CreateTab("Others") -- Title, Image
 
  local Button = PlayerTab:CreateButton({
-   Name = "SafeSpot (do not use in tight spaces)",
+   Name = "SafeSpot (do not use in tight spaces for you safety)",
    Callback = function()
         local part = Instance.new("Part")
         part.Name = "SafeSpotPartRMUH"
