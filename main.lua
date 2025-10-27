@@ -1,8 +1,8 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-    Name = "Residence Massacre ULTIMATE Hub (RMUH)",
-    LoadingTitle = "RMUH",
+    Name = "Residence Massacre ULTIMATE Hub (BETA)",
+    LoadingTitle = "RMUH v0.1",
     LoadingSubtitle = "by you don't need know",
 
     TextColor = Color3.fromRGB(255, 0, 0),
@@ -47,11 +47,12 @@ local Window = Rayfield:CreateWindow({
    end,
  })
 
-  local Toggle = PlayerTab:CreateToggle({
-   Name = "Ant-Frosted",
-   CurrentValue = false,
-   Flag = "Toggle3", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(value)
+if game.ReplicatedStorage.GameState:FindFirstChild("Blizzard").Value or game.ReplicatedStorage.GameState:FindFirstChild("Infinite").Value then
+    local Toggle = PlayerTab:CreateToggle({
+    Name = "Ant-Frosted",
+    CurrentValue = false,
+    Flag = "Toggle3", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(value)
         if value == true then
             game.Players.LocalPlayer.Character.Temperature.Disabled = true
             if game.Players.LocalPlayer.Character.Temperature.Disabled == false then 
@@ -63,8 +64,9 @@ local Window = Rayfield:CreateWindow({
                 game.Players.LocalPlayer.Character.Temperature.Disabled = false
             end
         end
-   end,
- })
+    end,
+    })
+end
 
  local Toggle = PlayerTab:CreateToggle({
    Name = "Infinite Stamina",
