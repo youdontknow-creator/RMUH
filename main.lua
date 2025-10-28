@@ -123,14 +123,7 @@ end
         end
    end,
  })
- local noite = nil
- if workspace:FindFirstChild("Mailbox") then
-    noite = 1
-elseif workspace:FindFirstChild("RadioTower") then
-    noite = 2
-elseif workspace:FindFirstChild("Cabins") then
-    noite = 3
- end
+ local noite = game.ReplicatedStorage.GameState:FindFirstChild("Night").Value
  if noite == 1 then
     local PlayerTab = Window:CreateTab("Night 1") -- Title, Image
     local larry = game.ReplicatedStorage:FindFirstChild("Mutant") or game.workspace:FindFirstChild("Mutant")
