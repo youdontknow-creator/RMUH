@@ -44,10 +44,15 @@ local Window = Rayfield:CreateWindow({
             player.CameraMinZoomDistance = 0
             player.CameraMaxZoomDistance = 0
         end
-   end,
+   end, 
  })
 
-if game.ReplicatedStorage.GameState:FindFirstChild("Blizzard").Value or game.ReplicatedStorage.GameState:FindFirstChild("Infinite").Value then
+local gameState = game.ReplicatedStorage:WaitForChild("GameState")
+
+local blizzard = gameState:FindFirstChild("Blizzard")
+local infinite = gameState:FindFirstChild("Infinite")
+
+if (blizzard and blizzard.Value) or (infinite and infinite.Value) then
     local Toggle = PlayerTab:CreateToggle({
     Name = "Ant-Frosted",
     CurrentValue = false,
@@ -123,8 +128,9 @@ end
         end
    end,
  })
- local noite = game.ReplicatedStorage.GameState.Night.Value
- if noite == 1 then
+
+local noite = gameState:FindFirstChild("Night")
+if noite and noite.Value == 1 and not gameState:FindFirstChild("Repairing") then
     local larry = game.ReplicatedStorage:FindFirstChild("Mutant") or game.workspace:FindFirstChild("Mutant")
     local PlayerTab = Window:CreateTab("Night 1") -- Title, Image
     local Toggle = PlayerTab:CreateToggle({
@@ -149,7 +155,7 @@ end
     })
     local connection
     local Toggle = PlayerTab:CreateToggle({
-        Name = "Auto Night (W.I.P NOT WORKING)",
+        Name = "Auto Night (Need start the night)",
         CurrentValue = false,
         Flag = "Toggle2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
         Callback = function(value)
@@ -241,7 +247,7 @@ end
         })
     end
  end
- if noite == 2 then
+ if gameState:FindFirstChild("Repairing") then
     local PlayerTab = Window:CreateTab("Night 2") -- Title, Image
 
     local Toggle = PlayerTab:CreateToggle({
@@ -351,7 +357,7 @@ end
         })
     end
  end
- if noite == 3 then
+ if noite and noite.Value == 3 or gameState:FindFirstChild("Ecologist") then
     local PlayerTab = Window:CreateTab("Night 3") -- Title, Image.
 
     local Toggle = PlayerTab:CreateToggle({
@@ -372,9 +378,9 @@ end
                     highlight.Parent = game.ReplicatedStorage:FindFirstChild("Mutant") 
                 end
             else
-                if game.ReplicatedStorage:FindFirstChild("Mutant").Highlight then
+                if game.ReplicatedStorage:FindFirstChild("Mutant") and game.ReplicatedStorage.Mutant:FindFirstChild("Highlight") then
                     game.ReplicatedStorage:FindFirstChild("Mutant").Highlight:Destroy()       
-                elseif game.workspace:FindFirstChild("Mutant").Highlight then
+                elseif game.workspace:FindFirstChild("Mutant") and game.workspace.Mutant:FindFirstChild("Highlight") then
                     game.workspace:FindFirstChild("Mutant").Highlight:Destroy()
                 end
             end
@@ -398,9 +404,9 @@ end
                     highlight.Parent = game.ReplicatedStorage:FindFirstChild("WorkerHead")
                 end
             else
-                if game.ReplicatedStorage:FindFirstChild("WorkerHead").Highlight then
+                if game.ReplicatedStorage:FindFirstChild("WorkerHead") and game.ReplicatedStorage.WorkerHead:FindFirstChild("Highlight") then
                     game.ReplicatedStorage:FindFirstChild("WorkerHead").Highlight:Destroy()       
-                elseif game.workspace:FindFirstChild("WorkerHead").Highlight then
+                elseif game.workspace:FindFirstChild("WorkerHead") and game.workspace.WorkerHead:FindFirstChild("Highlight") then
                     game.workspace:FindFirstChild("WorkerHead").Highlight:Destroy()
                 else
                     error("CABEÇA DO WORKER NAO ENCONTRADO")
