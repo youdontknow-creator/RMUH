@@ -123,10 +123,10 @@ end
         end
    end,
  })
- local noite = game.ReplicatedStorage.GameState:FindFirstChild("Night").Value
+ local noite = game.ReplicatedStorage.GameState.Night.Value
  if noite == 1 then
-    local PlayerTab = Window:CreateTab("Night 1") -- Title, Image
     local larry = game.ReplicatedStorage:FindFirstChild("Mutant") or game.workspace:FindFirstChild("Mutant")
+    local PlayerTab = Window:CreateTab("Night 1") -- Title, Image
     local Toggle = PlayerTab:CreateToggle({
         Name = "Highlight Larry",
         CurrentValue = false,
@@ -147,6 +147,58 @@ end
             end
         end,
     })
+    local connection
+    local Toggle = PlayerTab:CreateToggle({
+        Name = "Auto Night (W.I.P NOT WORKING)",
+        CurrentValue = false,
+        Flag = "Toggle2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Callback = function(value)
+        if value == true then
+                local RunService = game:GetService("RunService")
+                local player = game.Players.LocalPlayer
+                local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+                local windowsFolder = workspace:WaitForChild("Windows")
+                local lightsFolder = workspace:WaitForChild("Lights")
+
+                local checkInterval = 0.1
+
+                local function checkLarryTouch()
+                    for _, larryPart in ipairs(larry:GetDescendants()) do
+                        if larryPart:IsA("BasePart") then
+                            for _, touching in ipairs(larryPart:GetTouchingParts()) do
+                                local window = touching.Parent
+                                if window and window:IsDescendantOf(windowsFolder) and window:FindFirstChild("RoomName") then
+                                    for _, light in ipairs(lightsFolder:GetChildren()) do
+                                        if light:FindFirstChild("Status") and light.Status:FindFirstChild("RoomName") then
+                                            if window.RoomName.Value == light.Status.RoomName.Value then
+                                                local detector = light:FindFirstChild("Switch") and light.Switch:FindFirstChild("Detector")
+                                                if detector and detector:FindFirstChild("ClickDetector") then
+                                                    print("[CLIENT] Larry tocou na janela e ativou: " .. light.Name)
+                                                    detector.ClickDetector:fireclickdetector(game.Players.LocalPlayer)
+                                                end
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+
+                connection = task.spawn(function()
+                    while task.wait(checkInterval) do
+                        checkLarryTouch()
+                    end
+                end)
+            else
+                if connection then
+                    connection:Disconnect()
+                    connection = nil
+                end
+            end
+        end,
+    })  
     if game.workspace.Halloween then
         for i,RNGPumpkins in ipairs(game.workspace.Halloween.Pumpkins:GetChildren()) do
             RNGPumpkins.Name = "Pumpkin_"..i
