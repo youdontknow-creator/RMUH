@@ -516,7 +516,7 @@ if noite and noite.Value == 1 and not gameState:FindFirstChild("Repairing") then
     
     local Toggle = PlayerTab:CreateButton({
         Name = "Refil Generator",
-        Callback = function(value)
+        Callback = function()
             local player = game.Players.LocalPlayer
             local character = player.Character or player.CharacterAdded:Wait()
             local humanoidRoot = character:WaitForChild("HumanoidRootPart")
@@ -524,14 +524,28 @@ if noite and noite.Value == 1 and not gameState:FindFirstChild("Repairing") then
             local Shack = workspace:WaitForChild("Shack")
             local JerryCan = Shack:WaitForChild("JerryCan")
             local Generator = Shack:WaitForChild("Generator")
-            local fuelValue = Generator:WaitForChild("Fuel")
+            local Fuel = Generator:WaitForChild("Fuel") -- IntValue ou NumberValue
             local originalPos = humanoidRoot.Position
 
-            player.Character:MoveTo(PosTab.Generator)
-            fireclickdetector(JerryCan:WaitForChild("ClickDetector"))
-            task.wait(1)
-            fireclickdetector(Generator:WaitForChild("ClickDetector"))
-            player.Character:MoveTo(originalPos)
+            -- Teleporta para perto do Generator
+            humanoidRoot.CFrame = CFrame.new(PosTab.Generator)
+
+            task.wait(0.1)
+
+            --Jerry can 2x
+            for i = 1, 2 do 
+                fireclickdetector(JerryCan.ClickDetector)
+                task.wait(0.1)
+            end
+            task.wait(0.1)
+            --Generator 2x
+            for i = 1, 2 do 
+                fireclickdetector(Generator.ClickDetector)
+                task.wait(0.1)
+            end
+            task.wait(0.1)
+            -- Volta para a posição original
+            humanoidRoot.CFrame = CFrame.new(originalPos)
         end,
     })
     if game.workspace.Halloween then
@@ -806,24 +820,13 @@ if noite and noite.Value == 1 and not gameState:FindFirstChild("Repairing") then
 
                 -- Move o jogador até o detector
                 root.CFrame = CFrame.new(detector.Position + Vector3.new(0, 2, 0))
-                task.wait(0.2)
+                task.wait(0.1)
 
-                -- 🔁 Tenta clicar várias vezes até funcionar ou atingir o limite
-                local success = false
-                for attempt = 1, 5 do
+                for i = 1, 2 do 
                     fireclickdetector(click)
-                    task.wait(0.3)
-
-                    if Shotgun:FindFirstChild("Ammo") and Shotgun.Ammo.Value >= 2 then
-                        success = true
-                        break
-                    end
+                    task.wait(0.1)
                 end
-
-                if not success then
-                    warn("Não foi possível recarregar após várias tentativas.")
-                end
-
+                
                 -- Volta o jogador pra posição original
                 root.CFrame = CFrame.new(originalPos)
             else
